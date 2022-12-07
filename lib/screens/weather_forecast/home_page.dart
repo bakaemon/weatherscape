@@ -17,49 +17,57 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  WeatherFactory weatherFactory =
+      WeatherFactory(ConstraintValues.weatherAPIKey);
+  late WeatherScreenComponent weatherScreenComponent;
+  LocationData? locationData;
+  // List<Weather> weatherHourlyList = [];
+  List<Weather> weatherDailyList = [];
+
   @override
   Widget build(BuildContext context) {
-    WeatherFactory weatherFactory =
-        WeatherFactory(ConstraintValues.weatherAPIKey);
+    return startBuilders();
+  }
+
+  startBuilders() {
+    return locationBuilder();
+  }
+
+  locationBuilder() {
     return FutureBuilder(
-        future: LocationUtil.getLocation(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            LocationData? locationData = snapshot.data;
-            return FutureBuilder(
-                future: weatherFactory.currentWeatherByLocation(
-                    locationData!.latitude!, locationData.longitude!),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    Weather weather = snapshot.data as Weather;
-                    WeatherScreenComponent weatherScreenComponent =
-                        WeatherScreenComponent(context: context, weather: weather, locationData: locationData);
-                        weatherScreenComponent.buildHourlyForecast();
-                        weatherScreenComponent.buildDailyForecast();
-                        return weatherScreenComponent.buildMainScreen();
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        "Error: ${snapshot.error}",
-                        style: GoogleFonts.roboto(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                });
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+      future: LocationUtil.getLocation(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          locationData = snapshot.data as LocationData;
+          return weatherBuilder(locationData!);
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  weatherBuilder(LocationData locationData) {
+    return FutureBuilder(
+      future: weatherFactory.fiveDayForecastByLocation(
+          locationData.latitude!, locationData.longitude!),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          weatherDailyList = snapshot.data as List<Weather>;
+          weatherScreenComponent = WeatherScreenComponent(
+              context: context,
+              weathers: weatherDailyList,
+              locationData: locationData);
+          weatherScreenComponent.buildDailyForecast(weatherDailyList);
+          return weatherScreenComponent.buildMainScreen();
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
   }
 }

@@ -20,28 +20,27 @@ class WeatherScreenComponent {
 
   late int minTemp;
 
-  Weather weather;
+  List<Weather> weathers;
 
   LocationData locationData;
-  
-  late List<Widget> hourlyForecastComponent;
+
+  // late List<Widget> hourlyForecastComponent;
   late List<Widget> dailyForecastComponent;
 
   WeatherScreenComponent(
       {required this.context,
-      required this.weather,
+      required this.weathers,
       required this.locationData}) {
     size = MediaQuery.of(context).size;
     brightness = MediaQuery.of(context).platformBrightness;
     isDarkMode = brightness == Brightness.dark;
-    cityName = weather.areaName!;
-    currTemp = weather.temperature!.celsius!.round();
-    maxTemp = weather.tempMax!.celsius!.round();
-    minTemp = weather.tempMin!.celsius!.round();
+    cityName = weathers[0].areaName!;
+    currTemp = weathers[0].temperature!.celsius!.round();
+    maxTemp = weathers[0].tempMax!.celsius!.round();
+    minTemp = weathers[0].tempMin!.celsius!.round();
   }
 
   Widget buildMainScreen() {
-
     return Scaffold(
       body: Center(
         child: Container(
@@ -150,7 +149,7 @@ class WeatherScreenComponent {
                         ),
                         child: Align(
                           child: Text(
-                            'Sunny', // weather
+                            weathers[0].weatherDescription!, // weathers
                             style: GoogleFonts.questrial(
                               color:
                                   isDarkMode ? Colors.white54 : Colors.black54,
@@ -205,53 +204,54 @@ class WeatherScreenComponent {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.width * 0.05,
-                        ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                            color: isDarkMode
-                                ? Colors.white.withOpacity(0.05)
-                                : Colors.black.withOpacity(0.05),
-                          ),
-                          child: Column(
-                            children: [
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                    top: size.height * 0.01,
-                                    left: size.width * 0.03,
-                                  ),
-                                  child: Text(
-                                    'Forecast for today',
-                                    style: GoogleFonts.questrial(
-                                      color: isDarkMode
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontSize: size.height * 0.025,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(size.width * 0.005),
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: hourlyForecastComponent,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.symmetric(
+                      //     horizontal: size.width * 0.05,
+                      //   ),
+                      //   child: Container(
+                      //     decoration: BoxDecoration(
+                      //       borderRadius: const BorderRadius.all(
+                      //         Radius.circular(10),
+                      //       ),
+                      //       color: isDarkMode
+                      //           ? Colors.white.withOpacity(0.05)
+                      //           : Colors.black.withOpacity(0.05),
+                      //     ),
+                      //     child: Column(
+                      //       children: [
+                      //         Align(
+                      //           alignment: Alignment.centerLeft,
+                      //           child: Padding(
+                      //             padding: EdgeInsets.only(
+                      //               top: size.height * 0.01,
+                      //               left: size.width * 0.03,
+                      //             ),
+                      //             child: Text(
+                      //               'Forecast for today',
+                      //               style: GoogleFonts.questrial(
+                      //                 color: isDarkMode
+                      //                     ? Colors.white
+                      //                     : Colors.black,
+                      //                 fontSize: size.height * 0.025,
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //             ),
+                      //           ),
+                      //         ),
+
+                      //         Padding(
+                      //           padding: EdgeInsets.all(size.width * 0.005),
+                      //           child: SingleChildScrollView(
+                      //             scrollDirection: Axis.horizontal,
+                      //             child: Row(
+                      //               children: hourlyForecastComponent,
+                      //             ),
+                      //           ),
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // ),
                       Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: size.width * 0.05,
@@ -390,6 +390,88 @@ class WeatherScreenComponent {
     );
   }
 
+  Widget buildForecastTodayAlt(String time, int temp, int wind, int rainChance,
+      String weatherIcon, size, bool isDarkMode) {
+    return Padding(
+      padding: EdgeInsets.all(size.width * 0.025),
+      child: Column(
+        children: [
+          Text(
+            time,
+            style: GoogleFonts.questrial(
+              color: isDarkMode ? Colors.white : Colors.black,
+              fontSize: size.height * 0.02,
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: size.height * 0.005,
+                  ),
+                  child: Image.network(
+                    'http://openweathermap.org/img/w/$weatherIcon.png',
+                    height: size.height * 0.05,
+                    width: size.width * 0.1,
+                    fit: BoxFit.contain,
+                  )
+                ),
+            ],
+          ),
+          Text(
+            '$temp˚C',
+            style: GoogleFonts.questrial(
+              color: isDarkMode ? Colors.white : Colors.black,
+              fontSize: size.height * 0.025,
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.01,
+                ),
+                child: FaIcon(
+                  FontAwesomeIcons.wind,
+                  color: Colors.grey,
+                  size: size.height * 0.03,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            '$wind km/h',
+            style: GoogleFonts.questrial(
+              color: Colors.grey,
+              fontSize: size.height * 0.02,
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: size.height * 0.01,
+                ),
+                child: FaIcon(
+                  FontAwesomeIcons.umbrella,
+                  color: Colors.blue,
+                  size: size.height * 0.03,
+                ),
+              ),
+            ],
+          ),
+          Text(
+            '$rainChance %',
+            style: GoogleFonts.questrial(
+              color: Colors.blue,
+              fontSize: size.height * 0.02,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildSevenDayForecast(String time, int minTemp, int maxTemp,
       IconData weatherIcon, size, bool isDarkMode) {
     return Padding(
@@ -462,11 +544,137 @@ class WeatherScreenComponent {
     );
   }
 
-  buildHourlyForecast([List<Widget> components = const []]) {
-    hourlyForecastComponent = components;
+  Widget buildSevenDayForecastAlt(String time, int minTemp, int maxTemp,
+      String weatherMain, size, bool isDarkMode) {
+    return Padding(
+      padding: EdgeInsets.all(
+        size.height * 0.005,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.02,
+                ),
+                child: Text(
+                  time,
+                  style: GoogleFonts.questrial(
+                    color: isDarkMode ? Colors.white : Colors.black,
+                    fontSize: size.height * 0.025,
+                  ),
+                ),
+              ),
+              Padding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: size.height * 0.005,
+                  ),
+                  child: Icon(getWeatherIcon(weatherMain, 6))
+                  ),
+              Align(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: size.width * 0.15,
+                  ),
+                  child: Text(
+                    '$minTemp˚C',
+                    style: GoogleFonts.questrial(
+                      color: isDarkMode ? Colors.white38 : Colors.black38,
+                      fontSize: size.height * 0.025,
+                    ),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.05,
+                  ),
+                  child: Text(
+                    '$maxTemp˚C',
+                    style: GoogleFonts.questrial(
+                      color: isDarkMode ? Colors.white : Colors.black,
+                      fontSize: size.height * 0.025,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Divider(
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+  // /*
+  // * The function is temporally do nothing for now
+  // */
+  // buildHourlyForecast([List<Weather> hourlyWeathers = const []]) {
+  //   for (int i = 0; i < hourlyWeathers.length; i++) {
+  //     hourlyForecastComponent.add(
+  //       buildForecastTodayAlt(
+  //         i == 0 ? 'Now' : "${hourlyWeathers[i].date!.hour}:00",
+  //         getTemp(hourlyWeathers[i].temperature!),
+  //         hourlyWeathers[i].windSpeed!.toInt(),
+  //         0,
+  //         hourlyWeathers[i].weatherIcon!,
+  //         size,
+  //         isDarkMode,
+  //       ),
+  //     );
+  //   }
+  // }
+
+  buildDailyForecast([List<Weather> dailyWeathers = const []]) {
+    dailyForecastComponent = [];
+    for (int i = 0; i < dailyWeathers.length; i++) {
+      dailyForecastComponent.add(
+        buildSevenDayForecastAlt(
+          i == 0
+              ? 'Today'
+              : "${dailyWeathers[i].date!.day}/${dailyWeathers[i].date!.month}",
+          getTemp(dailyWeathers[i].tempMin!),
+          getTemp(dailyWeathers[i].tempMax!),
+          dailyWeathers[i].weatherMain!,
+          size,
+          isDarkMode,
+        ),
+      );
+    }
   }
 
-  buildDailyForecast([List<Widget> components = const []]) {
-    dailyForecastComponent = components;
+  int getTemp(Temperature temp) {
+    if (AppConfig.units == "metric") {
+      return temp.celsius!.round();
+    } else {
+      return temp.fahrenheit!.round();
+    }
+  }
+
+  IconData getWeatherIcon(String weatherMain, int hour) {
+    if (weatherMain == 'Clear') {
+      if (hour >= 6 && hour <= 18) {
+        return FontAwesomeIcons.sun;
+      } else {
+        return FontAwesomeIcons.moon;
+      }
+    } else if (weatherMain == 'Clouds') {
+      return FontAwesomeIcons.cloud;
+    } else if (weatherMain == 'Rain') {
+      return FontAwesomeIcons.cloudRain;
+    } else if (weatherMain == 'Snow') {
+      return FontAwesomeIcons.snowflake;
+    } else if (weatherMain == 'Thunderstorm') {
+      return FontAwesomeIcons.bolt;
+    } else if (weatherMain == 'Drizzle') {
+      return FontAwesomeIcons.cloudShowersHeavy;
+    } else {
+      return FontAwesomeIcons.smog;
+    }
   }
 }
