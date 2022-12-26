@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:weatherscape/config.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'screens/weather_forecast/weather_page.dart';
+import 'screens/main_page.dart';
 
 void main() {
   runApp(const ProviderScope(child: MyApp()));
+  // runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -13,32 +14,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyleWithShadow = TextStyle(color: Colors.white, shadows: [
-      BoxShadow(
-        color: Colors.black12.withOpacity(0.25),
-        spreadRadius: 1,
-        blurRadius: 4,
-        offset: const Offset(0, 0.5),
-      )
-    ]);
-    return MaterialApp(
-      title: AppConfig.appName,
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        brightness: Brightness.light,
-        textTheme: TextTheme(
-          headline1: textStyleWithShadow,
-          headline2: textStyleWithShadow,
-          headline3: textStyleWithShadow,
-          headline4: textStyleWithShadow,
-          headline5: textStyleWithShadow,
-          subtitle1: const TextStyle(color: Colors.white),
-          bodyText2: const TextStyle(color: Colors.white),
-          bodyText1: const TextStyle(color: Colors.white),
-          caption: const TextStyle(color: Colors.white70, fontSize: 13),
+    
+    return WillPopScope(
+        child: const MaterialApp(
+          title: AppConfig.appName,
+          debugShowCheckedModeBanner: false,
+          home: MainPage(),
         ),
-      ),
-      home: const WeatherPage(city: 'London'),
-    );
+        onWillPop: () => onWillPop(context));
+  }
+
+  Future<bool> onWillPop(BuildContext context) async {
+    // DateTime currentBackPressTime = DateTime.now();
+    // if (DateTime.now().difference(currentBackPressTime) >
+    //     const Duration(seconds: 2)) {
+    //   currentBackPressTime = DateTime.now();
+    //   WidgetTool.showSnackBar(context, "Press back again to exit");
+    //   return Future.value(false);
+    // }
+    return Future.value(false);
   }
 }

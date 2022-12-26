@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class WeatherIconImage extends StatelessWidget {
   const WeatherIconImage({
     Key? key,
     required this.iconCode,
-    this.size = 100,
+    this.size = 500,
   }) : super(key: key);
 
   final String iconCode;
@@ -12,8 +12,8 @@ class WeatherIconImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.network(
-      "http://openweathermap.org/img/w/$iconCode.png",
+    return CachedNetworkImage(
+      imageUrl: "http://openweathermap.org/img/wn/$iconCode@2x.png",
       width: size,
       height: size,
     );

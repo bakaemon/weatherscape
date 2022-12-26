@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:weatherscape/controllers/location_controller.dart';
+import 'package:weatherscape/utils/location_util.dart';
+import 'package:weatherscape/utils/widget_util.dart';
 
 import '../../constraints/constraints.dart';
+
 class SearchBox extends ConsumerStatefulWidget {
   const SearchBox({Key? key}) : super(key: key);
   @override
@@ -28,6 +32,25 @@ class _SearchRowState extends ConsumerState<SearchBox> {
   // circular radius
   @override
   Widget build(BuildContext context) {
+    return ref.watch(cityNameLocationController).when(
+      data: (cityName) {
+        _searchController.text = ref.read(cityProvider);
+        return _buildSearchBox();
+      },
+      error: (e, s) {
+        setState(() {
+          WidgetTool.showSnackBar(context, e.toString());
+        });
+        return _buildSearchBox();
+      },
+      loading: () {
+        _searchController.text = 'Loading...';
+        return _buildSearchBox();
+      },
+    );
+  }
+
+  Widget _buildSearchBox() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(

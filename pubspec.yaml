@@ -44,6 +44,9 @@ dependencies:
   dart_ipify: ^1.1.1
   weathers: ^1.0.2
   flutter_riverpod: ^2.1.1
+  cached_network_image: ^3.2.3
+  intl: ^0.18.0
+  geolocator: ^9.0.2
 
 dev_dependencies:
   flutter_test:
