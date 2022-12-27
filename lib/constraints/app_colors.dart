@@ -20,8 +20,8 @@ class AppColors {
   // Drawer
   static const drawerHeaderBackground = appBarTheme;
   static const drawerBackground = Colors.white;
-  static const drawerTextColor = Colors.black;
-  static const drawerIconColor = Colors.black;
+  static const drawerTextColor = Color.fromARGB(255, 87, 90, 100);
+  static const drawerIconColor = Color.fromARGB(255, 87, 90, 100);
   static const drawerSelectedColor = Colors.grey;
   static const drawerSelectedTextColor = Colors.white;
 
@@ -31,7 +31,7 @@ class AppColors {
   static const searchBoxIconColor = Colors.black;
   static const searchBoxSelectedColor = Colors.grey;
   static const searchBoxSelectedTextColor = Colors.white;
-  static const searchButton = accentColor;
+  static const searchButton = Colors.blueAccent;
 
   // Background
   static const backgroundGradient = primaryGradient;

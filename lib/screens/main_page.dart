@@ -19,7 +19,6 @@ DateTime currentBackPressTime = DateTime.now();
 class MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
-    
     return _buildPopScope(
         context,
         Scaffold(
@@ -44,7 +43,10 @@ class MainPageState extends ConsumerState<MainPage> {
             height: 120,
             child: DrawerHeader(
               decoration: BoxDecoration(
-                color: AppColors.drawerHeaderBackground,
+                gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: AppColors.backgroundGradient),
               ),
               child: Text(AppConfig.appName,
                   style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -103,8 +105,8 @@ class MainPageState extends ConsumerState<MainPage> {
   // Back press event
   Future<bool> onWillPop(BuildContext context) {
     final now = DateTime.now();
-    final difference = currentBackPressTime
-    .difference(now).inMilliseconds.abs();
+    final difference =
+        currentBackPressTime.difference(now).inMilliseconds.abs();
 
     if (difference < 500) {
       return Future.value(true);

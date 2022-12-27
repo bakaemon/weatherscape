@@ -25,8 +25,11 @@ class CurrentWeather extends ConsumerWidget {
           error: (e, s) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               var exceptionClassName = e.runtimeType.toString();
-              var exceptionMessage = e.toString().contains("404") ? "City not found" : "Can't get weather data";
-              WidgetTool.showNotifDialog(context, exceptionClassName, exceptionMessage);
+              var exceptionMessage = e.toString().contains("404")
+                  ? "City not found"
+                  : "Can't get weather data";
+              WidgetTool.showNotifDialog(
+                  context, exceptionClassName, exceptionMessage);
             });
             return const Center(child: Text("Can't get weather data"));
           },
@@ -47,23 +50,19 @@ class CurrentWeatherContents extends ConsumerWidget {
     final textTheme = Theme.of(context).textTheme;
 
     String temp = UnitUtil.getTemp(temp: data.temperature!, unit: units);
-    final minTemp = UnitUtil.getTemp(temp: data.tempMin!, unit: units);
-    final maxTemp = UnitUtil.getTemp(temp: data.tempMax!, unit: units);
-    final highAndLow = 'Max:$maxTemp Min:$minTemp';
-    return InkWell(
-      onTap: () {
-        ref.read(weatherWidgetProvider.notifier).state =
-            const DailyWeatherWidget();
-        //ref.invalidate(weatherWidgetProvider);
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          WeatherIconImage(iconCode: data.weatherIcon!, size: 120),
-          Text(temp, style: textTheme.headline2),
-          Text(highAndLow, style: textTheme.bodyText2),
-        ],
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        WeatherIconImage(iconCode: data.weatherIcon!, size: 120),
+        Text(temp, style: textTheme.headline2),
+        ref.watch(todayMaxMinController).when(
+              data: (maxMin) => Text(
+                  "Highest: ${UnitUtil.getTemp(temp: maxMin[0]!, unit: units)} / Lowest: ${UnitUtil.getTemp(temp: maxMin[1]!, unit: units)}",
+                  style: textTheme.bodyText2),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, s) => const Center(),
+            ),
+      ],
     );
   }
 }
