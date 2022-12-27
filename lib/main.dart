@@ -15,23 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    return WillPopScope(
-        child: const MaterialApp(
-          title: AppConfig.appName,
-          debugShowCheckedModeBanner: false,
-          home: MainPage(),
-        ),
-        onWillPop: () => onWillPop(context));
+    return const MaterialApp(
+      title: AppConfig.appName,
+      debugShowCheckedModeBanner: false,
+      home: MainPage(),
+    );
   }
 
-  Future<bool> onWillPop(BuildContext context) async {
-    // DateTime currentBackPressTime = DateTime.now();
-    // if (DateTime.now().difference(currentBackPressTime) >
-    //     const Duration(seconds: 2)) {
-    //   currentBackPressTime = DateTime.now();
-    //   WidgetTool.showSnackBar(context, "Press back again to exit");
-    //   return Future.value(false);
-    // }
-    return Future.value(false);
-  }
+
 }

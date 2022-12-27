@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weatherscape/config.dart';
 import 'package:weatherscape/screens/event_calendar/event_calendar_page.dart';
 import 'package:weatherscape/screens/weather_forecast/forecast_page.dart';
+import 'package:weatherscape/utils/widget_util.dart';
 import '../constraints/constraints.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -13,19 +14,23 @@ class MainPage extends ConsumerStatefulWidget {
 
 final titleProvider = StateProvider((ref) => "Forecast");
 final pageProvider = StateProvider<Widget>((ref) => const ForecastPage());
+DateTime currentBackPressTime = DateTime.now();
 
 class MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(ref.watch(titleProvider)),
-        backgroundColor: AppColors.appBarTheme,
-        elevation: 0,
-      ),
-      drawer: _buildDrawer(context, ref),
-      body: ref.watch(pageProvider),
-    );
+    
+    return _buildPopScope(
+        context,
+        Scaffold(
+          appBar: AppBar(
+            title: Text(ref.watch(titleProvider)),
+            backgroundColor: AppColors.appBarTheme,
+            elevation: 0,
+          ),
+          drawer: _buildDrawer(context, ref),
+          body: ref.watch(pageProvider),
+        ));
   }
 
   // Drawer
@@ -84,5 +89,28 @@ class MainPageState extends ConsumerState<MainPage> {
           Text(text, style: const TextStyle(color: AppColors.drawerTextColor)),
       onTap: onTap,
     );
+  }
+
+  // build backpress scope of event
+  Widget _buildPopScope(BuildContext context, Widget child) {
+    currentBackPressTime = DateTime.now(); // reset back press time
+    return WillPopScope(
+      onWillPop: () => onWillPop(context),
+      child: child,
+    );
+  }
+
+  // Back press event
+  Future<bool> onWillPop(BuildContext context) {
+    final now = DateTime.now();
+    final difference = currentBackPressTime
+    .difference(now).inMilliseconds.abs();
+
+    if (difference < 500) {
+      return Future.value(true);
+    }
+    currentBackPressTime = now;
+    WidgetTool.showSnackBar(context, "Press back again to exit");
+    return Future.value(false);
   }
 }
