@@ -33,7 +33,7 @@ class WidgetTool {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(message),
+          content: Text(message, style: const TextStyle(color: Colors.black)),
           actions: [
             TextButton(
               onPressed: () {

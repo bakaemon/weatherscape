@@ -13,25 +13,25 @@ class CurrentWeather extends ConsumerWidget {
   const CurrentWeather({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
     final city = ref.watch(cityProvider);
     final weatherDataValue = ref.watch(currentWeatherControllerProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(city, style: Theme.of(context).textTheme.headline4),
+        Text(city, style: textTheme.headline4),
         weatherDataValue.when(
           data: (weatherData) => CurrentWeatherContents(data: weatherData),
           loading: () => const Center(child: CircularProgressIndicator()),
           error: (e, s) {
             WidgetsBinding.instance.addPostFrameCallback((_) {
-              var exceptionClassName = e.runtimeType.toString();
               var exceptionMessage = e.toString().contains("404")
                   ? "City not found"
                   : "Can't get weather data";
               WidgetTool.showNotifDialog(
-                  context, exceptionClassName, exceptionMessage);
+                  context, "Error", exceptionMessage);
             });
-            return const Center(child: Text("Can't get weather data"));
+            return Center(child: Text("Can't get weather data", style: textTheme.bodyText2,));
           },
         ),
       ],

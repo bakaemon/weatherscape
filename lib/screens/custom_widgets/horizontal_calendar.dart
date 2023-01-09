@@ -57,7 +57,7 @@ class _HorizontonalCalendarState extends State<HorizontonalCalendar> {
           Text(DateFormat('EEE').format(date)),
           Text(DateFormat('d').format(date)),
           WeatherIconImage(iconCode: weatherIcon, size: 50),
-          Text(weatherMain!),
+          Text(weatherMain),
           Text(temperature),
         ],
       ),

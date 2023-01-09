@@ -1,12 +1,17 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather/weather.dart';
 import 'package:weatherscape/constraints/constraints.dart';
+import 'package:weatherscape/utils/weather_gradient.dart';
 
 import 'location_controller.dart';
 
-final currentWeatherControllerProvider = FutureProvider((ref) {
+final currentWeatherControllerProvider = FutureProvider((ref) async {
   final weather = WeatherFactory(ConstraintValues.weatherAPIKey);
-  return weather.currentWeatherByCityName(ref.watch(cityProvider));
+  final weatherData = await weather.currentWeatherByCityName(ref.watch(cityProvider));
+  ref.read(backgroundProvider.notifier).state = WeatherGradient(weatherMain: weatherData.weatherMain!).gradientPrimaryColor;
+  return weatherData;
 });
 final fiveDayWeatherController = FutureProvider((ref) {
   final weather = WeatherFactory(ConstraintValues.weatherAPIKey);

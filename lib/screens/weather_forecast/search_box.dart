@@ -62,9 +62,9 @@ class _SearchRowState extends ConsumerState<SearchBox> {
               child: TextField(
                 controller: _searchController,
                 textAlign: TextAlign.center,
-                style: const TextStyle(color: AppColors.searchBoxTextColor),
+                style: const TextStyle(color: Colors.black),
                 decoration: const InputDecoration(
-                  fillColor: AppColors.searchBoxTheme,
+                  fillColor: Colors.white,
                   filled: true,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.only(
@@ -81,9 +81,9 @@ class _SearchRowState extends ConsumerState<SearchBox> {
             child: Container(
               height: 50,
               alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: AppColors.searchButton,
-                borderRadius: BorderRadius.only(
+              decoration: BoxDecoration(
+                color: ref.watch(accentColorProvider),
+                borderRadius: const BorderRadius.only(
                   topRight: Radius.circular(_radius),
                   bottomRight: Radius.circular(_radius),
                 ),
