@@ -24,4 +24,17 @@ class GradientContainer extends StatelessWidget {
       child: child,
     );
   }
+
+  static Widget builder({required Widget child, required List<Color> colors})
+  {
+    return Container(
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              stops: const [0, 1.0],
+              colors: colors)),
+      child: child,
+    );
+  }
 }

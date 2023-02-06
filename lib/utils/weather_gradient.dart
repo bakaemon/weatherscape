@@ -6,10 +6,11 @@ class WeatherGradient {
 
   MaterialColor get gradientPrimaryColor {
     switch (weatherMain) {
+      case 'Clouds':
       case 'Clear':
         return Colors.indigo;
-      case 'Clouds':
-        return Colors.grey;
+      
+        // return Colors.lightBlue;
       case 'Rain':
         return Colors.blueGrey;
       case 'Snow':
@@ -17,7 +18,7 @@ class WeatherGradient {
       case 'Thunderstorm':
         return Colors.deepPurple;
       case 'Drizzle':
-        return Colors.blueGrey;
+        return Colors.deepPurple;
       case 'Mist':
         return Colors.blueGrey;
       case 'Smoke':
@@ -25,19 +26,19 @@ class WeatherGradient {
       case 'Haze':
         return Colors.blueGrey;
       case 'Dust':
-        return Colors.blueGrey;
+        return Colors.grey;
       case 'Fog':
         return Colors.blueGrey;
       case 'Sand':
-        return Colors.blueGrey;
+        return Colors.orange;
       case 'Ash':
-        return Colors.blueGrey;
+        return Colors.grey;
       case 'Squall':
         return Colors.blueGrey;
       case 'Tornado':
         return Colors.blueGrey;
       default:
-        return Colors.blueGrey;
+        return Colors.indigo;
     }
   }
 }
