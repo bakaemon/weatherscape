@@ -21,6 +21,4 @@ class MyApp extends StatelessWidget {
       home: MainPage(),
     );
   }
-
-
 }
