@@ -64,8 +64,12 @@ class SearchBoxAutoComplete extends StatelessWidget {
                     : value
                         .where((element) => element[0]
                             .toLowerCase()
-                            .contains(pattern.toLowerCase()))
+                            .startsWith(pattern.toLowerCase()))
                         .toList());
+                        // .where((element) => element[0]
+                        //     .toLowerCase()
+                        //     .contains(pattern.toLowerCase()))
+                        // .toList());
               },
               suggestionsBoxDecoration: const SuggestionsBoxDecoration(
                 constraints: BoxConstraints(
@@ -77,7 +81,7 @@ class SearchBoxAutoComplete extends StatelessWidget {
                 return ListTile(
                   title: Text(suggestion[0],
                       style: const TextStyle(color: Colors.black)),
-                  subtitle: Text(CountryUtil.countries[suggestion[1]] ?? 'Unknown Country',
+                  subtitle: Text(suggestion[1] ?? 'Unknown Country',
                       style: const TextStyle(
                           color: Color.fromARGB(255, 111, 111, 111))),
                 );

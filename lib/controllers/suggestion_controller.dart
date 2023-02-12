@@ -29,15 +29,34 @@ import 'package:weatherscape/constraints/constraints.dart';
 //       .toList();
 // }
 
+// Future<List<List<String>>> fetchSuggestions(String query) {
+//   // read the json file current.city.list.json
+//   // and return a list of suggestions
+//   return rootBundle
+//       .loadString('assets/json/current.city.list.json')
+//       .then((jsonStr) {
+//     final List<dynamic> jsonList = json.decode(jsonStr);
+//     return jsonList
+//         .map((dynamic item) => [
+//               item['name'] as String,
+//               item['country'] as String,
+//             ])
+//         .toList();
+//   });
+// }
+
+
 Future<List<List<String>>> fetchSuggestions(String query) {
   // read the json file current.city.list.json
   // and return a list of suggestions
-  return rootBundle.loadStricurrent.city.list.json').then((jsonStr) {
-    final List<dynamic> jsonList = json.decode(jsonStr);
+  return rootBundle
+      .loadString('assets/json/owm_city_list.json')
+      .then((jsonStr) {
+    final List<dynamic> jsonList = json.decode(jsonStr)['RECORDS'];
     return jsonList
         .map((dynamic item) => [
-              item['name'] as String,
-              item['country'] as String,
+              item['owm_city_name'] as String,
+              item['country_long'] as String,
             ])
         .toList();
   });
