@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather/weather.dart';
 import 'package:weatherscape/config.dart';
 import 'package:weatherscape/controllers/location_controller.dart';
+import 'package:weatherscape/screens/weather_forecast/charts/uv_chart_page.dart';
 import 'package:weatherscape/screens/weather_forecast/daily_weather.dart';
 import 'package:weatherscape/controllers/weather_controller.dart';
 import 'package:weatherscape/utils/unit_util.dart';
@@ -67,6 +68,8 @@ class CurrentWeatherContentsExpanded extends ConsumerWidget {
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, s) => const Center(),
             ),
+        const SizedBox(height: 20),
+        const UVChart(uvData: [1, 2, 5, 13, 4, 3])
       ],
     );
   }

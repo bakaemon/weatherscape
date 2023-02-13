@@ -49,6 +49,8 @@ dependencies:
   material_floating_search_bar: ^0.3.7
   table_calendar: ^3.0.9
   flutter_typeahead: ^4.3.1
+  # fl_chart: ^0.60.0
+  fl_chart: ^0.36.0
 
 dev_dependencies:
   flutter_test:
