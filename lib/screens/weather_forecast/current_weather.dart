@@ -3,14 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:weather/weather.dart';
 import 'package:weatherscape/config.dart';
 import 'package:weatherscape/controllers/location_controller.dart';
+import 'package:weatherscape/controllers/weather_detail_controller.dart';
 import 'package:weatherscape/screens/weather_forecast/charts/uv_chart_page.dart';
 import 'package:weatherscape/screens/weather_forecast/daily_weather.dart';
 import 'package:weatherscape/controllers/weather_controller.dart';
 import 'package:weatherscape/utils/unit_util.dart';
 import 'package:weatherscape/utils/widget_util.dart';
 import '../../utils/weather_icon.dart';
-
-
 
 class CurrentWeather extends ConsumerWidget {
   bool isExpanded;
@@ -71,7 +70,13 @@ class CurrentWeatherContentsExpanded extends ConsumerWidget {
               error: (e, s) => const Center(),
             ),
         const SizedBox(height: 20),
-        const UVChart(uvData: [1, 2, 5, 13, 4, 3])
+        ref.watch(weatherDetailController).when(
+              data: (data) {
+                return UVChart(uvData: data.map((e) => e[0]) as List<double>);
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, s) => Center(child: Text(e.toString())),
+            ),
       ],
     );
   }
@@ -117,7 +122,7 @@ class CurrentWeatherContents extends ConsumerWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Text(ref.watch(cityProvider),style:  textTheme.headline4),
+        Text(ref.watch(cityProvider), style: textTheme.headline4),
         WeatherIconImage(iconCode: data.weatherIcon!, size: 120),
         Text(temp, style: textTheme.headline2),
         ref.watch(todayMaxMinController).when(
