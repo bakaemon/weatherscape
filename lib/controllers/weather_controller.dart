@@ -7,10 +7,12 @@ import 'package:weatherscape/utils/weather_gradient.dart';
 
 import 'location_controller.dart';
 
+final currentLatLong = StateProvider<List<double>>((ref) => []);
 final currentWeatherControllerProvider = FutureProvider((ref) async {
   final weather = WeatherFactory(ConstraintValues.weatherAPIKey);
   final weatherData = await weather.currentWeatherByCityName(ref.watch(cityProvider));
   ref.read(backgroundProvider.notifier).state = WeatherGradient(weatherMain: weatherData.weatherMain!).gradientPrimaryColor;
+  ref.read(currentLatLong.notifier).state = [weatherData.latitude!, weatherData.longitude!];
   return weatherData;
 });
 final fiveDayWeatherController = FutureProvider((ref) {
