@@ -55,6 +55,7 @@ Future<List<List<String>>> fetchSuggestions(String query) {
     final List<dynamic> jsonList = json.decode(jsonStr)['RECORDS'];
     return jsonList
         .map((dynamic item) => [
+          
               item['owm_city_name'] as String,
               item['country_long'] as String,
             ])
